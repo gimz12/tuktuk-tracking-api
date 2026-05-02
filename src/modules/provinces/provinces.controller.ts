@@ -12,24 +12,24 @@ import { Role } from '../../common/roles.enum';
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('provinces')
 export class ProvincesController {
-  constructor(private readonly service: ProvincesService) {}
+  constructor(private readonly provinceService: ProvincesService) {}
 
   @Get()
   @ApiOperation({ summary: 'List all provinces' })
   list() {
-    return this.service.findAll();
+    return this.provinceService.findAll();
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get a single province' })
   get(@Param('id') id: string) {
-    return this.service.findById(id);
+    return this.provinceService.findById(id);
   }
 
   @Post()
   @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Create a province (admin only)' })
   create(@Body() dto: CreateProvinceDto) {
-    return this.service.create(dto);
+    return this.provinceService.create(dto);
   }
 }

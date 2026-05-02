@@ -13,14 +13,14 @@ import {
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly auth: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Public()
   @Post('login')
   @HttpCode(200)
   @ApiOperation({ summary: 'User login (admin / province admin / station officer)' })
   login(@Body() dto: LoginDto) {
-    return this.auth.loginUser(dto.email, dto.password);
+    return this.authService.loginUser(dto.email, dto.password);
   }
 
   @Public()
@@ -28,7 +28,7 @@ export class AuthController {
   @HttpCode(200)
   @ApiOperation({ summary: 'Exchange device credentials for a device JWT' })
   deviceToken(@Body() dto: DeviceTokenDto) {
-    return this.auth.issueDeviceToken(dto.deviceId, dto.deviceSecret);
+    return this.authService.issueDeviceToken(dto.deviceId, dto.deviceSecret);
   }
 
   @UseGuards(JwtAuthGuard)

@@ -14,7 +14,7 @@ interface UserJwtPayload {
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'user-jwt') {
-  constructor(config: ConfigService, private readonly users: UsersService) {
+  constructor(config: ConfigService, private readonly userService: UsersService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -26,7 +26,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'user-jwt') {
     if (payload.scope !== 'user') {
       throw new UnauthorizedException('Invalid token scope');
     }
-    const user = await this.users.findById(payload.sub);
+    const user = await this.userService.findById(payload.sub);
     if (!user || !user.isActive) {
       throw new UnauthorizedException('User inactive or missing');
     }

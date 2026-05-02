@@ -20,25 +20,25 @@ import { Role } from '../../common/roles.enum';
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('districts')
 export class DistrictsController {
-  constructor(private readonly service: DistrictsService) {}
+  constructor(private readonly districtService: DistrictsService) {}
 
   @Get()
   @ApiQuery({ name: 'provinceId', required: false })
   @ApiOperation({ summary: 'List districts (optionally filtered by province)' })
   list(@Query('provinceId') provinceId?: string) {
-    return this.service.findAll(provinceId);
+    return this.districtService.findAll(provinceId);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get a single district' })
   get(@Param('id') id: string) {
-    return this.service.findById(id);
+    return this.districtService.findById(id);
   }
 
   @Post()
   @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Create a district (admin only)' })
   create(@Body() dto: CreateDistrictDto) {
-    return this.service.create(dto);
+    return this.districtService.create(dto);
   }
 }

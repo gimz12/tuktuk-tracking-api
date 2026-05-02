@@ -23,8 +23,8 @@ export interface IngestedPing {
 export class PingsService {
   constructor(
     @InjectModel(Ping.name) private readonly model: Model<PingDocument>,
-    private readonly tuktuks: TuktuksService,
-    private readonly devices: DevicesService,
+    private readonly tuktukService: TuktuksService,
+    private readonly deviceService: DevicesService,
   ) {}
 
   async ingest(
@@ -39,7 +39,7 @@ export class PingsService {
       throw new BadRequestException('Maximum 500 pings per request');
     }
 
-    const tuktuk = await this.tuktuks.findById(tuktukId);
+    const tuktuk = await this.tuktukService.findById(tuktukId);
     if (tuktuk.deviceId.toString() !== deviceId) {
       throw new BadRequestException('Device is not bonded to this tuk-tuk');
     }
@@ -61,7 +61,7 @@ export class PingsService {
     const latest = docs.reduce((acc, d) =>
       acc.recordedAt > d.recordedAt ? acc : d,
     );
-    await this.devices.touchLastSeen(tuktuk.deviceId, latest.recordedAt);
+    await this.deviceService.touchLastSeen(tuktuk.deviceId, latest.recordedAt);
     return { accepted: inserted.length };
   }
 

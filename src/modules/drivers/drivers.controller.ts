@@ -12,24 +12,24 @@ import { Role } from '../../common/roles.enum';
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('drivers')
 export class DriversController {
-  constructor(private readonly service: DriversService) {}
+  constructor(private readonly driverService: DriversService) {}
 
   @Get()
   @ApiOperation({ summary: 'List drivers' })
   list() {
-    return this.service.findAll();
+    return this.driverService.findAll();
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get a single driver' })
   get(@Param('id') id: string) {
-    return this.service.findById(id);
+    return this.driverService.findById(id);
   }
 
   @Post()
   @Roles(Role.ADMIN, Role.PROVINCE_ADMIN, Role.STATION_OFFICER)
   @ApiOperation({ summary: 'Register a new driver' })
   create(@Body() dto: CreateDriverDto) {
-    return this.service.create(dto);
+    return this.driverService.create(dto);
   }
 }

@@ -13,11 +13,11 @@ import { ProvincesService } from '../provinces/provinces.service';
 export class DistrictsService {
   constructor(
     @InjectModel(District.name) private readonly model: Model<DistrictDocument>,
-    private readonly provinces: ProvincesService,
+    private readonly provinceService: ProvincesService,
   ) {}
 
   async create(dto: CreateDistrictDto) {
-    await this.provinces.findById(dto.provinceId);
+    await this.provinceService.findById(dto.provinceId);
     const code = dto.code.toUpperCase();
     const existing = await this.model.findOne({ code });
     if (existing) throw new ConflictException(`District ${code} already exists`);

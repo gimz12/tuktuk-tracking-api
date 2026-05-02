@@ -19,15 +19,15 @@ import { Role } from '../../common/roles.enum';
 export class TuktuksService {
   constructor(
     @InjectModel(Tuktuk.name) private readonly model: Model<TuktukDocument>,
-    private readonly drivers: DriversService,
-    private readonly devices: DevicesService,
-    private readonly stations: StationsService,
+    private readonly driverService: DriversService,
+    private readonly deviceService: DevicesService,
+    private readonly stationService: StationsService,
   ) {}
 
   async register(dto: RegisterTuktukDto) {
-    await this.drivers.findById(dto.driverId);
-    const device = await this.devices.findById(dto.deviceId);
-    const station = await this.stations.findById(dto.stationId);
+    await this.driverService.findById(dto.driverId);
+    const device = await this.deviceService.findById(dto.deviceId);
+    const station = await this.stationService.findById(dto.stationId);
 
     const reg = dto.registrationNumber.toUpperCase();
     const dup = await this.model.findOne({
@@ -51,7 +51,7 @@ export class TuktuksService {
       provinceId: station.provinceId,
     });
 
-    await this.devices.assignToTuktuk(device.deviceId, tuktuk._id);
+    await this.deviceService.assignToTuktuk(device.deviceId, tuktuk._id);
     return tuktuk;
   }
 

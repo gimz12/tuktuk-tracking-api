@@ -27,9 +27,9 @@ import { PingsService } from '../pings/pings.service';
 @Controller('locations')
 export class LocationsController {
   constructor(
-    private readonly locations: LocationsService,
-    private readonly tuktuks: TuktuksService,
-    private readonly pings: PingsService,
+    private readonly locationService: LocationsService,
+    private readonly tuktukService: TuktuksService,
+    private readonly pingService: PingsService,
   ) {}
 
   @Get('live')
@@ -41,7 +41,7 @@ export class LocationsController {
     @CurrentUser() user: AuthenticatedUser,
     @Query() dto: LiveLocationsQueryDto,
   ) {
-    return this.locations.live(user, dto);
+    return this.locationService.live(user, dto);
   }
 
   @Get('history')
@@ -56,7 +56,7 @@ export class LocationsController {
     @Query('districtId') districtId?: string,
     @Query('stationId') stationId?: string,
   ) {
-    return this.locations.history(
+    return this.locationService.history(
       user,
       { provinceId, districtId, stationId },
       dto,
@@ -70,8 +70,8 @@ export class LocationsController {
     @CurrentUser() user: AuthenticatedUser,
     @Param('id') id: string,
   ) {
-    await this.tuktuks.assertVisibleTo(user, id);
-    const ping = await this.pings.lastForTuktuk(id);
+    await this.tuktukService.assertVisibleTo(user, id);
+    const ping = await this.pingService.lastForTuktuk(id);
     if (!ping) throw new NotFoundException('No pings recorded for this tuk-tuk');
     return ping;
   }
@@ -84,8 +84,8 @@ export class LocationsController {
     @Param('id') id: string,
     @Query() dto: HistoryQueryDto,
   ) {
-    await this.tuktuks.assertVisibleTo(user, id);
-    const items = await this.pings.historyForTuktuk(
+    await this.tuktukService.assertVisibleTo(user, id);
+    const items = await this.pingService.historyForTuktuk(
       id,
       new Date(dto.from),
       new Date(dto.to),

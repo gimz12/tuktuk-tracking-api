@@ -20,7 +20,7 @@ import { Role } from '../../common/roles.enum';
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('stations')
 export class StationsController {
-  constructor(private readonly service: StationsService) {}
+  constructor(private readonly stationService: StationsService) {}
 
   @Get()
   @ApiQuery({ name: 'provinceId', required: false })
@@ -30,19 +30,19 @@ export class StationsController {
     @Query('provinceId') provinceId?: string,
     @Query('districtId') districtId?: string,
   ) {
-    return this.service.findAll({ provinceId, districtId });
+    return this.stationService.findAll({ provinceId, districtId });
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get a station' })
   get(@Param('id') id: string) {
-    return this.service.findById(id);
+    return this.stationService.findById(id);
   }
 
   @Post()
   @Roles(Role.ADMIN, Role.PROVINCE_ADMIN)
   @ApiOperation({ summary: 'Create a station' })
   create(@Body() dto: CreateStationDto) {
-    return this.service.create(dto);
+    return this.stationService.create(dto);
   }
 }

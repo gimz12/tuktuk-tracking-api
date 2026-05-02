@@ -13,19 +13,19 @@ import { Role } from '../../common/roles.enum';
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly users: UsersService,
+    private readonly userService: UsersService,
     @Inject(forwardRef(() => DevicesService))
-    private readonly devices: DevicesService,
+    private readonly deviceService: DevicesService,
     private readonly jwt: JwtService,
     private readonly config: ConfigService,
   ) {}
 
   async loginUser(email: string, password: string) {
-    const user = await this.users.findByEmail(email);
+    const user = await this.userService.findByEmail(email);
     if (!user || !user.isActive) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    const ok = await this.users.verifyPassword(user, password);
+    const ok = await this.userService.verifyPassword(user, password);
     if (!ok) throw new UnauthorizedException('Invalid credentials');
 
     const payload = { sub: user._id.toString(), role: user.role, scope: 'user' };
@@ -49,7 +49,7 @@ export class AuthService {
   }
 
   async issueDeviceToken(deviceId: string, deviceSecret: string) {
-    const device = await this.devices.verifySecret(deviceId, deviceSecret);
+    const device = await this.deviceService.verifySecret(deviceId, deviceSecret);
     if (!device) {
       throw new UnauthorizedException('Invalid device credentials');
     }

@@ -25,7 +25,7 @@ import {
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('tuktuks')
 export class TuktuksController {
-  constructor(private readonly service: TuktuksService) {}
+  constructor(private readonly tuktukService: TuktuksService) {}
 
   @Get()
   @Roles(Role.ADMIN, Role.PROVINCE_ADMIN, Role.STATION_OFFICER)
@@ -34,7 +34,7 @@ export class TuktuksController {
     @CurrentUser() user: AuthenticatedUser,
     @Query() dto: ListTuktuksDto,
   ) {
-    return this.service.list(user, dto);
+    return this.tuktukService.list(user, dto);
   }
 
   @Get(':id')
@@ -44,13 +44,13 @@ export class TuktuksController {
     @CurrentUser() user: AuthenticatedUser,
     @Param('id') id: string,
   ) {
-    return this.service.assertVisibleTo(user, id);
+    return this.tuktukService.assertVisibleTo(user, id);
   }
 
   @Post()
   @Roles(Role.ADMIN, Role.PROVINCE_ADMIN, Role.STATION_OFFICER)
   @ApiOperation({ summary: 'Register a tuk-tuk (binds driver + device + station)' })
   register(@Body() dto: RegisterTuktukDto) {
-    return this.service.register(dto);
+    return this.tuktukService.register(dto);
   }
 }

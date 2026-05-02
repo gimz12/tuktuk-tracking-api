@@ -12,13 +12,13 @@ import { RolesGuard } from '../../common/guards/roles.guard';
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('users')
 export class UsersController {
-  constructor(private readonly users: UsersService) {}
+  constructor(private readonly userService: UsersService) {}
 
   @Post()
   @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Create a user (HQ admin only)' })
   async create(@Body() dto: CreateUserDto) {
-    const user = await this.users.create(dto);
+    const user = await this.userService.create(dto);
     return this.sanitize(user.toObject() as unknown as Record<string, unknown>);
   }
 
@@ -26,7 +26,7 @@ export class UsersController {
   @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'List all users (HQ admin only)' })
   async list() {
-    const all = await this.users.listAll();
+    const all = await this.userService.listAll();
     return all.map((u) => this.sanitize(u.toObject() as unknown as Record<string, unknown>));
   }
 

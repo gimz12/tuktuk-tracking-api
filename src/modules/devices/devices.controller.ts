@@ -12,20 +12,20 @@ import { Role } from '../../common/roles.enum';
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('devices')
 export class DevicesController {
-  constructor(private readonly service: DevicesService) {}
+  constructor(private readonly deviceService: DevicesService) {}
 
   @Get()
   @Roles(Role.ADMIN, Role.PROVINCE_ADMIN)
   @ApiOperation({ summary: 'List all tracking devices' })
   list() {
-    return this.service.findAll();
+    return this.deviceService.findAll();
   }
 
   @Get(':id')
   @Roles(Role.ADMIN, Role.PROVINCE_ADMIN, Role.STATION_OFFICER)
   @ApiOperation({ summary: 'Get a single device' })
   get(@Param('id') id: string) {
-    return this.service.findById(id);
+    return this.deviceService.findById(id);
   }
 
   @Post()
@@ -34,6 +34,6 @@ export class DevicesController {
     summary: 'Register a new tracking device. Secret is stored hashed; keep your copy safe.',
   })
   register(@Body() dto: RegisterDeviceDto) {
-    return this.service.register(dto);
+    return this.deviceService.register(dto);
   }
 }

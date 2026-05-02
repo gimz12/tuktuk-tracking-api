@@ -18,11 +18,11 @@ export interface StationFilter {
 export class StationsService {
   constructor(
     @InjectModel(Station.name) private readonly model: Model<StationDocument>,
-    private readonly districts: DistrictsService,
+    private readonly districtService: DistrictsService,
   ) {}
 
   async create(dto: CreateStationDto) {
-    const district = await this.districts.findById(dto.districtId);
+    const district = await this.districtService.findById(dto.districtId);
     const code = dto.code.toUpperCase();
     const existing = await this.model.findOne({ code });
     if (existing) throw new ConflictException(`Station ${code} already exists`);

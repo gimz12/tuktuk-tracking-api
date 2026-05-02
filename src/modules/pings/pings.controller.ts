@@ -13,7 +13,7 @@ import {
 @UseGuards(DeviceJwtGuard)
 @Controller('pings')
 export class PingsController {
-  constructor(private readonly service: PingsService) {}
+  constructor(private readonly pingService: PingsService) {}
 
   @Post()
   @ApiOperation({ summary: 'Submit a single GPS ping (device only)' })
@@ -21,7 +21,7 @@ export class PingsController {
     @CurrentUser() device: AuthenticatedUser,
     @Body() body: PingPayloadDto,
   ) {
-    return this.service.ingest(device.tuktukId!, device.sub, [body]);
+    return this.pingService.ingest(device.tuktukId!, device.sub, [body]);
   }
 
   @Post('bulk')
@@ -30,6 +30,6 @@ export class PingsController {
     @CurrentUser() device: AuthenticatedUser,
     @Body() body: BulkPingDto,
   ) {
-    return this.service.ingest(device.tuktukId!, device.sub, body.pings);
+    return this.pingService.ingest(device.tuktukId!, device.sub, body.pings);
   }
 }
