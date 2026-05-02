@@ -1,0 +1,11 @@
+{
+  "provinces": 9,
+  "districts": 25,
+  "stations": 22,
+  "drivers": 200,
+  "devices": 200,
+  "tuktuks": 200,
+  "pings": 134400,
+  "users": 3,
+  "deviceCredentials": "see device-credentials.json (200 entries)"
+}
