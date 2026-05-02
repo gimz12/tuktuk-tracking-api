@@ -4,7 +4,7 @@ services:
     runtime: node
     plan: free
     region: singapore
-    buildCommand: npm ci && npm run build
+    buildCommand: yarn install --frozen-lockfile && yarn build
     startCommand: node dist/main.js
     healthCheckPath: /api/v1/health
     autoDeploy: true
