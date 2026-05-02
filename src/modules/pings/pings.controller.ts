@@ -21,7 +21,7 @@ export class PingsController {
     @CurrentUser() device: AuthenticatedUser,
     @Body() body: PingPayloadDto,
   ) {
-    return this.service.ingest(device.tuktukId!, device.deviceId!, [body]);
+    return this.service.ingest(device.tuktukId!, device.sub, [body]);
   }
 
   @Post('bulk')
@@ -30,6 +30,6 @@ export class PingsController {
     @CurrentUser() device: AuthenticatedUser,
     @Body() body: BulkPingDto,
   ) {
-    return this.service.ingest(device.tuktukId!, device.deviceId!, body.pings);
+    return this.service.ingest(device.tuktukId!, device.sub, body.pings);
   }
 }
