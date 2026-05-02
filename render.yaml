@@ -4,7 +4,7 @@ services:
     runtime: node
     plan: free
     region: singapore
-    buildCommand: yarn install && yarn build
+    buildCommand: NODE_ENV=development yarn install && yarn build
     startCommand: node dist/main.js
     healthCheckPath: /api/v1/health
     autoDeploy: true
