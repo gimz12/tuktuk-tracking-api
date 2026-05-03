@@ -18,6 +18,8 @@ export class DevicesService {
   async register(dto: RegisterDeviceDto) {
     const existing = await this.model.findOne({ deviceId: dto.deviceId });
     if (existing) throw new ConflictException(`Device ${dto.deviceId} already registered`);
+    // cost factor 10 — recommended balance between brute-force resistance
+    // and runtime cost for an interactive endpoint
     const secretHash = await bcrypt.hash(dto.deviceSecret, 10);
     const created = await this.model.create({
       deviceId: dto.deviceId,

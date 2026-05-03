@@ -55,6 +55,9 @@ export class TuktuksService {
     return tuktuk;
   }
 
+  // RBAC scope filter — narrows the Mongoose query so a province admin can
+  // only see vehicles in their own province, and a station officer only in
+  // their own station. Admin role gets no extra filter.
   buildScopedFilter(
     user: AuthenticatedUser,
     extra: ListTuktuksDto = {},
@@ -69,6 +72,7 @@ export class TuktuksService {
       filter.stationId = new Types.ObjectId(user.stationId);
     }
 
+    // user-supplied query params can narrow further but never widen scope
     if (extra.provinceId) {
       if (filter.provinceId && filter.provinceId.toString() !== extra.provinceId) {
         throw new BadRequestException('Out-of-scope provinceId');

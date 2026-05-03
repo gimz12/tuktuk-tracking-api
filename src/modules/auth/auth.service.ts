@@ -22,6 +22,8 @@ export class AuthService {
 
   async loginUser(email: string, password: string) {
     const user = await this.userService.findByEmail(email);
+    // same error message for missing user vs wrong password — avoids leaking
+    // which email addresses are registered
     if (!user || !user.isActive) {
       throw new UnauthorizedException('Invalid credentials');
     }

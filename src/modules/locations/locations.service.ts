@@ -45,6 +45,9 @@ export class LocationsService {
     return filter;
   }
 
+  // "Live view" — latest ping per tuk-tuk inside a recent time window.
+  // Implemented as an aggregation: match scope + time, sort newest first,
+  // group by tuktukId taking the first (newest) ping for each vehicle.
   async live(user: AuthenticatedUser, dto: LiveLocationsQueryDto) {
     const baseFilter = this.scopeFilter(user, dto);
     const since = new Date(

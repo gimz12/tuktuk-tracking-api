@@ -24,6 +24,8 @@ export class Ping {
   @Prop({ required: true, type: Types.ObjectId, ref: 'Device' })
   deviceId!: Types.ObjectId;
 
+  // denormalised refs — copied from the parent tuk-tuk so scope queries
+  // don't need a join across collections
   @Prop({ required: true, type: Types.ObjectId, ref: 'Station', index: true })
   stationId!: Types.ObjectId;
 
@@ -51,8 +53,10 @@ export class Ping {
 
 export const PingSchema = SchemaFactory.createForClass(Ping);
 
+// compound indexes for time-window queries by scope
 PingSchema.index({ tuktukId: 1, recordedAt: -1 });
 PingSchema.index({ stationId: 1, recordedAt: -1 });
 PingSchema.index({ districtId: 1, recordedAt: -1 });
 PingSchema.index({ provinceId: 1, recordedAt: -1 });
+// geospatial index — required for $near / $geoWithin queries
 PingSchema.index({ location: '2dsphere' });
